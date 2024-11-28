@@ -1,7 +1,6 @@
 let num1;
-let num2;
-let operator = '';
 let result;
+let operator = '';
 let displayContent = '';
 
 const display = document.querySelector("#display");
@@ -14,44 +13,41 @@ const clear = document.querySelector("#clear");
 
 for (let i = 0; i < digits.length; i++) {
     digits[i].addEventListener("click", () => {
-        if (parseFloat(displayContent + digits[i].textContent) > 1e9) {
+        // Set maximum display and number length
+        if (parseFloat(displayContent + digits[i].textContent) > 1e9 || displayContent.length > 9) {
             return;
         }
+        // Prevent from entering numbers that start with zero
         if (display.textContent === '0') {
             displayContent = '';
-            display.textContent = displayContent;
+            display.textContent = '';
             displayContent += digits[i].textContent;
             display.textContent = displayContent;
-        } else if(!(display.textContent === '0' && digits[i].textContent === '0')) {
-                displayContent += digits[i].textContent;
-                display.textContent = displayContent;
+        
+        } else {
+            displayContent += digits[i].textContent;
+            display.textContent = displayContent;
         }
     })
 }
 
 for (let i = 0; i < operators.length; i++) {
     operators[i].addEventListener("click", () => {
+        // Change operator with no display
         if (display.textContent === '') {
             if(operator !== '') {
                 operator = operators[i].textContent;
-                console.log("n1: " + num1 + ", n2: " + num2 + ", op: " + operator + (", res: " + result));
-            } else {
-                console.log("n1: " + num1 + ", n2: " + num2 + ", op: " + operator + (", res: " + result));
             }
         } else {
-            
             // Start
             if (operator === '') {
                 num1 = parseFloat(display.textContent);
-                //console.log("P: n1: " + num1 + ", n2: " + num2 + ", op: " + operator + (", res: " + result));
                 operator = operators[i].textContent;
                 result = num1;
-                console.log("START:\nn1: " + num1 + ", n2: " + num2 + ", op: " + operator + (", res: " + result));
             } else {
                 let equalClickEvent = new Event("click");
                 equal.dispatchEvent(equalClickEvent);
                 operator = operators[i].textContent;
-                console.log("DIGIT:\nn1: " + num1 + ", n2: " + num2 + ", op: " + operator + (", res: " + result));
             }
             displayContent = '';
             display.textContent = displayContent;
@@ -71,15 +67,12 @@ equal.addEventListener("click", (event) => {
         }
         result = parseFloat((operate(result, num1, operator)).toFixed(3));
         operator = '';
-        console.log("EQUAL TRUSTED:\nn1: " + num1 + ", n2: " + num2 + ", op: " + operator + (", res: " + result));
-
     } else {
         if (!isNaN(parseFloat(displayContent))) {
             num1 = parseFloat(displayContent);
         }
         result = parseFloat((operate(result, num1, operator)).toFixed(3));
-        console.log("EQUAL NOT TRUSTED:\nn1: " + num1 + ", n2: " + num2 + ", op: " + operator + (", res: " + result));
-    }
+        }
     if (!isNaN(result)) {
         displayContent = result;
         display.textContent = displayContent;
@@ -90,12 +83,11 @@ equal.addEventListener("click", (event) => {
 })
 
 clear.addEventListener("click", () => {
-    num1 = 0;
-    num2 = 0;
-    result = 0;
+    num1 = '';
+    result = '';
     operator = '';
     displayContent = '';
-    display.textContent = displayContent;
+    display.textContent = '';
 })
 
 
